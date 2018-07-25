@@ -8,6 +8,16 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 
+mongoose.connect('mongodb://localhost:27017/beers', {
+	useNewUrlParser: true
+})
+mongoose.connection.on('connected', () => {
+	console.log('Connected to "beers" database!')
+})
+mongoose.connection.on('error', (err) => {
+	console.log('Uh oh... ' + err)
+})
+
 // Middleware
 app.use((req, res, next) => {
 	console.log(`Something's hitting me...`)
@@ -17,7 +27,7 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
 	console.log(`...and I don't know if I like it.`)
 	next()
-})
+}) 
 
 app.get('/', (req, res) => {
 	res.json({ message: 'Welcome to our API! Try hitting the /api endpoint.' })
